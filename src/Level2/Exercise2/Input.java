@@ -16,11 +16,11 @@ public class Input {
                 value = scanner.nextByte();
                 valueCorrect = true;
             } catch (InputMismatchException e) {
-                System.out.println("Format error.");
+                System.out.println("Invalid input. Please enter a number between 0 and 100.");
                 scanner.nextLine();
             }
         }
-
+        scanner.nextLine();
         return value;
     }
 
@@ -34,11 +34,11 @@ public class Input {
                 value = scanner.nextInt();
                 valueCorrect = true;
             } catch (InputMismatchException e) {
-                System.out.println("Format error.");
+                System.out.println("Invalid input. Please enter a valid integer.");
                 scanner.nextLine();
             }
         }
-
+        scanner.nextLine();
         return value;
     }
 
@@ -52,11 +52,11 @@ public class Input {
                 value = scanner.nextFloat();
                 valueCorrect = true;
             } catch (InputMismatchException e) {
-                System.out.println("Format error.");
+                System.out.println("Invalid input. Please enter a valid decimal number (for example: 1.75).");
                 scanner.nextLine();
             }
         }
-
+        scanner.nextLine();
         return value;
     }
 
@@ -70,11 +70,11 @@ public class Input {
                 value = scanner.nextDouble();
                 valueCorrect = true;
             } catch (InputMismatchException e) {
-                System.out.println("Format error.");
+                System.out.println("Invalid input. Please enter a valid decimal number (for example: 3.1415).");
                 scanner.nextLine();
             }
         }
-
+        scanner.nextLine();
         return value;
     }
 
@@ -83,61 +83,41 @@ public class Input {
         boolean valueCorrect = false;
 
         while (!valueCorrect) {
-            try {
-                System.out.print(message + ": ");
-                value = scanner.next().charAt(0);
+            System.out.print(message + ": ");
+            String input = scanner.nextLine();
+            if (input.length() == 1) {
+                value = input.charAt(0);
                 valueCorrect = true;
-            } catch (Exception e) {
-                System.out.println("Error. Please enter a character.");
-                scanner.nextLine();
+            } else {
+                System.out.println("Error. Enter a single character.");
             }
         }
-
         return value;
     }
 
     public static String readString(String message) {
-        String value = "";
-        boolean valueCorrect = false;
-
-        while (!valueCorrect) {
-            try {
-                System.out.print(message + ": ");
-                value = scanner.nextLine();
-                valueCorrect = true;
-            } catch (Exception e) {
-                System.out.println("Error. Please enter a text string.");
-                scanner.nextLine();
-            }
-        }
-
-        return value;
+        System.out.print(message + ": ");
+        return scanner.nextLine();
     }
 
     public static boolean readYesNo(String message) {
-        String value = "";
+        String value;
         boolean response = false;
         boolean valueCorrect = false;
 
         while (!valueCorrect) {
-            try {
-                System.out.print(message + " (y/n): ");
-                value = scanner.nextLine().toLowerCase();
-                if (value.equals("y")) {
-                    response = true;
-                    valueCorrect = true;
-                } else if (value.equals("n")) {
-                    response = false;
-                    valueCorrect = true;
-                } else {
-                    System.out.println("Error. Please enter 'y' or 'n'.");
-                }
-            } catch (Exception e) {
+            System.out.print(message + " (y/n): ");
+            value = scanner.nextLine().toLowerCase();
+            if (value.equals("y")) {
+                response = true;
+                valueCorrect = true;
+            } else if (value.equals("n")) {
+                response = false;
+                valueCorrect = true;
+            } else {
                 System.out.println("Error. Please enter 'y' or 'n'.");
-                scanner.nextLine();
             }
         }
-
         return response;
     }
 }

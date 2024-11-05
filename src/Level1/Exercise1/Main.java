@@ -13,7 +13,6 @@ public class Main {
         secondSale.addProduct(new Product("Tomato", 0.70));
         secondSale.addProduct(new Product("Potato", 1.20));
 
-        System.out.println("Printing ticket...");
         try {
             secondSale.calculateTotalPrice();
             System.out.println("Total price: " + secondSale.getTotalPrice() + " €");

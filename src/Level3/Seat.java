@@ -23,12 +23,16 @@ public class Seat {
         return reservedBy;
     }
 
-    public boolean equals(Seat seat) {
-        return this.rowNumber == seat.getRowNumber() && this.seatNumber == seat.getSeatNumber();
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Seat)) return false;
+        Seat seat = (Seat) obj;
+        return rowNumber == seat.rowNumber && seatNumber == seat.seatNumber;
     }
 
+    @Override
     public String toString() {
-        return "Row: " + rowNumber + ", Seat: " + seatNumber + ", Name: " + reservedBy;
+        return "Row: " + rowNumber + ", Seat: " + seatNumber + ", Reserved by: " + reservedBy;
     }
-
 }

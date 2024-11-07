@@ -1,5 +1,8 @@
 package Level3;
 
+import Level3.exceptions.SeatAlreadyReservedException;
+import Level3.exceptions.SeatNotReservedException;
+
 import java.util.ArrayList;
 
 public class SeatManager {
@@ -22,18 +25,21 @@ public class SeatManager {
         return -1;
     }
 
-    public void addSeat(Seat seat) throws Exception {
+    public void addSeat(Seat seat) throws SeatAlreadyReservedException {
         if (searchSeat(seat.getRowNumber(), seat.getSeatNumber()) != -1) {
-            throw new Exception("Seat is already occupied.");
+            throw new SeatAlreadyReservedException("Seat is already occupied.");
         }
         seats.add(seat);
     }
 
-    public void removeSeat(int row, int seat) throws Exception {
-        int index = searchSeat(row, seat);
-        if (index == -1) {
-            throw new Exception("Seat is not reserved.");
+    public void removeSeat(int row, int seat) throws SeatNotReservedException {
+        for (Seat s : seats) {
+            if (s.getRowNumber() == row && s.getSeatNumber() == seat) {
+                seats.remove(s);
+                System.out.println("Seat reservation canceled successfully.");
+                return;
+            }
         }
-        seats.remove(index);
+        throw new SeatNotReservedException("This seat is not reserved.");
     }
 }

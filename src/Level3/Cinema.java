@@ -1,5 +1,6 @@
 package Level3;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Cinema {
@@ -43,10 +44,37 @@ public class Cinema {
         System.out.println("Exiting application.");
     }
 
-    public void requestSeats() {
-        System.out.print("Enter the number of rows: ");
-        this.rows = scanner.nextInt();
-        System.out.print("Enter the number of seats per row: ");
-        this.seatsPerRow = scanner.nextInt();
+    private void requestSeats() {
+        boolean validData = false;
+
+        do {
+            try {
+                System.out.println("Enter the number of rows:");
+                String inputRows = scanner.nextLine();
+                if (!inputRows.matches("\\d+")) {
+                    throw new InputMismatchException("You must enter a number");
+                }
+                rows = Integer.parseInt(inputRows);
+                if (rows <= 0) {
+                    throw new IllegalArgumentException("The number of rows must be greater than 0");
+                }
+
+                System.out.println("Enter the number of seats per row:");
+                String inputSeats = scanner.nextLine();
+                if (!inputSeats.matches("\\d+")) {
+                    throw new InputMismatchException("You must enter a number");
+                }
+                seatsPerRow = Integer.parseInt(inputSeats);
+                if (seatsPerRow <= 0) {
+                    throw new IllegalArgumentException("The number of seats must be greater than 0");
+                }
+
+                validData = true;
+            } catch (InputMismatchException | IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Unexpected error. Please try again.");
+            }
+        } while (!validData);
     }
 }

@@ -1,5 +1,9 @@
 package Level3;
 
+import Level3.exceptions.InvalidNameException;
+import Level3.exceptions.InvalidRowException;
+import Level3.exceptions.InvalidSeatException;
+
 import java.util.Scanner;
 
 public class CinemaManager {
@@ -66,36 +70,46 @@ public class CinemaManager {
     }
 
     public void cancelAllReservationsByPerson() {
-        System.out.print("Enter the name of the person: ");
-        String name = scanner.nextLine();
-        cinema.getSeatManager().getSeats().removeIf(seat -> seat.getReservedBy().equals(name));
+    System.out.print("Enter the name of the person: ");
+    String name = scanner.nextLine();
+    boolean reservationFound = cinema.getSeatManager().getSeats().removeIf(seat -> seat.getReservedBy().equals(name));
+    if (reservationFound) {
         System.out.println("All reservations by " + name + " have been canceled.");
+    } else {
+        System.out.println("Reservation not found for " + name + ".");
     }
+}
 
-    private String inputPersonName() throws Exception {
+    private String inputPersonName() throws InvalidNameException {
         System.out.print("Enter the name of the person: ");
         String name = scanner.nextLine();
         if (name.matches(".*\\d.*")) {
-            throw new Exception("The name cannot contain numbers.");
+            throw new InvalidNameException("The name cannot contain numbers.");
         }
+        if (name.isEmpty()) {
+            throw new InvalidNameException("The name cannot be empty.");
+        }
+
         return name;
     }
 
-    private int inputRow() throws Exception {
+    private int inputRow() throws InvalidRowException {
         System.out.print("Enter the row number: ");
         int row = scanner.nextInt();
         if (row < 1 || row > cinema.getRows()) {
-            throw new Exception("Row number is incorrect.");
+            throw new InvalidRowException("Row number must be between 1 and " + cinema.getRows() + ".");
         }
+
         return row;
     }
 
-    private int inputSeat() throws Exception {
+    private int inputSeat() throws InvalidSeatException {
         System.out.print("Enter the seat number: ");
         int seat = scanner.nextInt();
         if (seat < 1 || seat > cinema.getSeatsPerRow()) {
-            throw new Exception("Seat number is incorrect.");
+            throw new InvalidSeatException("Seat number must be between 1 and " + cinema.getSeatsPerRow() + ".");
         }
+
         return seat;
     }
 }

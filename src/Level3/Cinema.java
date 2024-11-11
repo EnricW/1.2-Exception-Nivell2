@@ -44,9 +44,36 @@ public class Cinema {
     }
 
     public void requestSeats() {
-        System.out.print("Enter the number of rows: ");
-        this.rows = scanner.nextInt();
-        System.out.print("Enter the number of seats per row: ");
-        this.seatsPerRow = scanner.nextInt();
+        boolean validInput = false;
+
+        while (!validInput) {
+            System.out.print("Enter the number of rows: ");
+            try {
+                rows = Integer.parseInt(scanner.nextLine());
+                if (rows <= 0) {
+                    System.out.println("Number of rows must be greater than 0. Please try again.");
+                } else {
+                    validInput = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a positive integer for the number of rows.");
+            }
+        }
+
+        validInput = false;
+
+        while (!validInput) {
+            System.out.print("Enter the number of seats per row: ");
+            try {
+                seatsPerRow = Integer.parseInt(scanner.nextLine());
+                if (seatsPerRow <= 0) {
+                    System.out.println("Number of seats per row must be greater than 0. Please try again.");
+                } else {
+                    validInput = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a positive integer for the number of seats per row.");
+            }
+        }
     }
 }

@@ -1,115 +1,64 @@
 package Level3;
 
-import Level3.exception.InvalidNameException;
-import Level3.exception.InvalidRowException;
-import Level3.exception.InvalidSeatException;
+import Level3.exception.*;
 
-import java.util.Scanner;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CinemaManager {
-    private Cinema cinema;
-    private final Scanner scanner;
+    private final Cinema cinema;
+    private final SeatManager seatManager;
 
     public CinemaManager(Cinema cinema) {
         this.cinema = cinema;
-        this.scanner = new Scanner(System.in);
+        this.seatManager = new SeatManager();
     }
 
-    public int menu() {
-        int option;
-        do {
-            System.out.println("1 - Show all reserved seats.");
-            System.out.println("2 - Show seats reserved by a person.");
-            System.out.println("3 - Reserve a seat.");
-            System.out.println("4 - Cancel a seat reservation.");
-            System.out.println("5 - Cancel all reservations by a person.");
-            System.out.println("0 - Exit.");
-            option = scanner.nextInt();
-            scanner.nextLine();
-        } while (option < 0 || option > 5);
-
-        return option;
+    public List<Seat> getAllReservedSeats() {
+        return seatManager.getSeats();
     }
 
-    public void showReservedSeats() {
-        for (Seat s : cinema.getSeatManager().getSeats()) {
-            System.out.println(s);
+    public List<Seat> getReservedSeatsByPerson(String personName) {
+        return seatManager.getSeats().stream()
+                .filter(seat -> seat.getReservedBy().equals(personName))
+                .collect(Collectors.toList());
+    }
+
+    public void reserveSeat(int row, int seat, String personName) throws InvalidRowException, InvalidSeatException, InvalidNameException, SeatAlreadyReservedException {
+        validateRow(row);
+        validateSeat(seat);
+        validateName(personName);
+        seatManager.addSeat(new Seat(row, seat, personName));
+    }
+
+    public void cancelReservation(int row, int seat) throws InvalidRowException, InvalidSeatException, SeatNotReservedException {
+        validateRow(row);
+        validateSeat(seat);
+        seatManager.removeSeat(row, seat);
+    }
+
+    public boolean cancelAllReservationsByPerson(String personName) {
+        return seatManager.getSeats().removeIf(seat -> seat.getReservedBy().equals(personName));
+    }
+
+    private void validateRow(int row) throws InvalidRowException {
+        if (row < 1 || row > cinema.getRows()) {
+            throw new InvalidRowException("Row number must be between 1 and " + cinema.getRows() + ".");
         }
     }
 
-    public void showReservedSeatsByPerson() {
-        System.out.print("Enter the name of the person: ");
-        String name = scanner.nextLine();
-        for (Seat s : cinema.getSeatManager().getSeats()) {
-            if (s.getReservedBy().equals(name)) {
-                System.out.println(s);
-            }
+    private void validateSeat(int seat) throws InvalidSeatException {
+        if (seat < 1 || seat > cinema.getSeatsPerRow()) {
+            throw new InvalidSeatException("Seat number must be between 1 and " + cinema.getSeatsPerRow() + ".");
         }
     }
 
-    public void reserveSeat() {
-        try {
-            int row = inputRow();
-            int seat = inputSeat();
-            scanner.nextLine();
-            String name = inputPersonName();
-            cinema.getSeatManager().addSeat(new Seat(row, seat, name));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void cancelSeatReservation() {
-        try {
-            int row = inputRow();
-            int seat = inputSeat();
-            cinema.getSeatManager().removeSeat(row, seat);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void cancelAllReservationsByPerson() {
-        System.out.print("Enter the name of the person: ");
-        String name = scanner.nextLine();
-        boolean reservationFound = cinema.getSeatManager().getSeats().removeIf(seat -> seat.getReservedBy().equals(name));
-        if (reservationFound) {
-            System.out.println("All reservations by " + name + " have been canceled.");
-        } else {
-            System.out.println("Reservation not found for " + name + ".");
-        }
-    }
-
-    private String inputPersonName() throws InvalidNameException {
-        System.out.print("Enter the name of the person: ");
-        String name = scanner.nextLine();
+    private void validateName(String name) throws InvalidNameException {
         if (name.matches(".*\\d.*")) {
             throw new InvalidNameException("The name cannot contain numbers.");
         }
         if (name.isEmpty()) {
             throw new InvalidNameException("The name cannot be empty.");
         }
-
-        return name;
-    }
-
-    private int inputRow() throws InvalidRowException {
-        System.out.print("Enter the row number: ");
-        int row = scanner.nextInt();
-        if (row < 1 || row > cinema.getRows()) {
-            throw new InvalidRowException("Row number must be between 1 and " + cinema.getRows() + ".");
-        }
-
-        return row;
-    }
-
-    private int inputSeat() throws InvalidSeatException {
-        System.out.print("Enter the seat number: ");
-        int seat = scanner.nextInt();
-        if (seat < 1 || seat > cinema.getSeatsPerRow()) {
-            throw new InvalidSeatException("Seat number must be between 1 and " + cinema.getSeatsPerRow() + ".");
-        }
-
-        return seat;
     }
 }

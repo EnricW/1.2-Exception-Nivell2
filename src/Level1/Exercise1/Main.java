@@ -20,9 +20,14 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        for (Product p : secondSale.products) {
-            System.out.println("Item: " + p.getName());
+        try {
+            for (Product p : secondSale.products) {
+                System.out.println("Item: " + p.getName());
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Error: " + e.getMessage());
         }
+
 
         try {
             System.out.println("Item in the shopping cart: " + secondSale.products.get(2).getName());

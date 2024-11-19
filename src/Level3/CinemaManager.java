@@ -1,8 +1,8 @@
 package Level3;
 
-import Level3.exceptions.InvalidNameException;
-import Level3.exceptions.InvalidRowException;
-import Level3.exceptions.InvalidSeatException;
+import Level3.exception.InvalidNameException;
+import Level3.exception.InvalidRowException;
+import Level3.exception.InvalidSeatException;
 
 import java.util.Scanner;
 
@@ -15,9 +15,9 @@ public class CinemaManager {
         this.scanner = new Scanner(System.in);
     }
 
-    public int menu(){
+    public int menu() {
         int option;
-        do{
+        do {
             System.out.println("1 - Show all reserved seats.");
             System.out.println("2 - Show seats reserved by a person.");
             System.out.println("3 - Reserve a seat.");
@@ -70,15 +70,15 @@ public class CinemaManager {
     }
 
     public void cancelAllReservationsByPerson() {
-    System.out.print("Enter the name of the person: ");
-    String name = scanner.nextLine();
-    boolean reservationFound = cinema.getSeatManager().getSeats().removeIf(seat -> seat.getReservedBy().equals(name));
-    if (reservationFound) {
-        System.out.println("All reservations by " + name + " have been canceled.");
-    } else {
-        System.out.println("Reservation not found for " + name + ".");
+        System.out.print("Enter the name of the person: ");
+        String name = scanner.nextLine();
+        boolean reservationFound = cinema.getSeatManager().getSeats().removeIf(seat -> seat.getReservedBy().equals(name));
+        if (reservationFound) {
+            System.out.println("All reservations by " + name + " have been canceled.");
+        } else {
+            System.out.println("Reservation not found for " + name + ".");
+        }
     }
-}
 
     private String inputPersonName() throws InvalidNameException {
         System.out.print("Enter the name of the person: ");

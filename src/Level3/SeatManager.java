@@ -1,7 +1,7 @@
 package Level3;
 
-import Level3.exceptions.SeatAlreadyReservedException;
-import Level3.exceptions.SeatNotReservedException;
+import Level3.exception.SeatAlreadyReservedException;
+import Level3.exception.SeatNotReservedException;
 
 import java.util.ArrayList;
 

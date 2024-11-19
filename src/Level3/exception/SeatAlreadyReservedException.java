@@ -1,4 +1,4 @@
-package Level3.exceptions;
+package Level3.exception;
 
 public class SeatAlreadyReservedException extends Exception {
     public SeatAlreadyReservedException(String message) {
